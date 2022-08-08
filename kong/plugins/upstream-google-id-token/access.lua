@@ -65,7 +65,6 @@ local function get_id_token(conf)
     local httpc = http.new()
     local token_uri = google_application_credentials['token_uri']
     local params = "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=" .. signed_jwt
-    local id_token = ""
     local res, err = httpc:request_uri(token_uri, {
         method = "POST",
         body = params,

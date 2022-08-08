@@ -14,7 +14,8 @@ end
 describe(PLUGIN_NAME .. ": (schema)", function()
 
     it("accepts an empty conf", function()
-        assert(validate({}, schema_def))
+        local plugin_schema = require("kong.plugins." .. PLUGIN_NAME .. ".schema")
+        assert(validate({}, plugin_schema))
     end)
 
     it("accepts a ttl value for the id token cache", function()

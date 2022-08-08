@@ -1,5 +1,4 @@
 local typedefs = require "kong.db.schema.typedefs"
-
 local PLUGIN_NAME = "upstream-google-id-token"
 
 local schema = {
