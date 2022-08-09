@@ -55,11 +55,33 @@ local function build_token_request_payload(conf)
     return payload
 end
 
+--- This is a function that is used to get the id token from the metadata service.
+-- @param conf kong configuration
+-- @return the id token (string)
+local function get_id_token_from_metadata_service(conf)
+    local httpc = http.new()
+    local res, err = httpc:request_uri(
+        "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity?audience=" ..
+            get_audience(), {
+            method = "GET",
+            headers = {
+                ["Metadata-Flavor"] = "Google"
+            }
+        })
+    if not res then
+        return nil, err
+    else
+        local id_token = res.body
+        kong.log.debug("got new id-token for ", get_audience(), " '", id_token, "'")
+        return id_token
+    end
+end
+
 --- Making a request to the google api to get the id token,
 --- based on a given service-account
 -- @param conf kong configuration
 -- @return the id token (string)
-local function get_id_token(conf)
+local function get_id_token_via_sa_key(conf)
     local payload = build_token_request_payload(conf)
     local signed_jwt = encode_jwt_token(conf, payload, google_application_credentials['private_key'])
     local httpc = http.new()
@@ -85,22 +107,20 @@ end
 -- @param conf kong configuration
 local function add_id_token_jwt_header(conf)
     local token_cache_key = get_audience() -- conf.audience
+    local refresh_function = get_id_token_from_metadata_service
+
+    if (google_application_credentials) then
+        refresh_function = get_id_token_via_sa_key
+    end
 
     local id_token, err = kong.cache:get(token_cache_key, {
         ttl = conf.id_token_cache_ttl
-    }, get_id_token, conf)
+    }, refresh_function, conf)
 
     if err then
         kong.log.err(err)
         return kong.response.exit(500, {
             message = "Unexpected error"
-        })
-    end
-
-    if not id_token then
-        -- no id_token available
-        return kong.response.exit(401, {
-            message = "Failed to get id token"
         })
     end
 

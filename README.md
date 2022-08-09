@@ -21,7 +21,7 @@ curl -i -X POST http://kong:8001/services/{service}/plugins/ \
 
 ### Running outside of the google cloud
 
-You can call a private service from outside Google Cloud using a downloaded service account key. You should place the key somewere it can be read from a nginx worker process. The plugin checks the environemt variable `GOOGLE_APPLICATION_CREDENTIALS` for a path to the key file.
+You can call a private service from outside Google Cloud using a downloaded service account key. You should place the key somewere it can be read from the nginx root process. The plugin checks the environemt variable `GOOGLE_APPLICATION_CREDENTIALS` for a path to the key file.
 
 ## Supported Kong Releases
 

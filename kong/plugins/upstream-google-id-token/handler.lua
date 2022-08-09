@@ -30,7 +30,8 @@ if (path_to_sa_json) then
     assert(google_application_credentials["type"] == "service_account")
     fh:close()
 else
-    kong.log.warn("GOOGLE_APPLICATION_CREDENTIALS not set")
+    kong.log.notice("GOOGLE_APPLICATION_CREDENTIALS not set")
+    google_application_credentials = nil
 end
 
 --[[ handles more initialization, but AFTER the worker process has been forked/created.
