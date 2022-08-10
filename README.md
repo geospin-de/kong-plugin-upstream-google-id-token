@@ -45,8 +45,8 @@ pongo run
 Expected output:
 ```
 Kong version: 2.8.1
-●●●●●●●
-7 successes / 0 failures / 0 errors / 0 pending : 13.093063 seconds
+●●●●●●●●●●
+10 successes / 0 failures / 0 errors / 0 pending : 27.130195 seconds
 ```
 
 ## Maintainers

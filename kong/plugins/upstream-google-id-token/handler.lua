@@ -27,7 +27,8 @@ if (path_to_sa_json) then
     local fh = assert(io.open(path_to_sa_json, "r"), "Inaccessible sa file: " .. path_to_sa_json)
     local contents = fh:read("*a")
     google_application_credentials = json.decode(contents)
-    assert(google_application_credentials["type"] == "service_account")
+    assert(google_application_credentials["type"] == "service_account",
+        "Key 'type' not found or value not equal to 'service_account' in " .. path_to_sa_json)
     fh:close()
 else
     kong.log.notice("GOOGLE_APPLICATION_CREDENTIALS not set")

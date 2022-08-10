@@ -6,7 +6,7 @@ for _, strategy in helpers.all_strategies() do
     describe(PLUGIN_NAME .. ": (access) [#" .. strategy .. "]", function()
         local client
 
-        helpers.setenv("GOOGLE_APPLICATION_CREDENTIALS", "/kong-plugin/spec/fixtures/sa.json")
+        helpers.setenv("GOOGLE_APPLICATION_CREDENTIALS", "/kong-plugin/spec/fixtures/fake-service-account.json")
 
         lazy_setup(function()
 
@@ -28,6 +28,27 @@ for _, strategy in helpers.all_strategies() do
                 }
             }
 
+            local fixtures = {
+                http_mock = {
+                    metadata = [[
+              server {
+                server_name oauth2.googleapis.com;
+                listen 80;
+                keepalive_requests 10;
+                location = /token {
+                  default_type application/json;
+                  echo '{"id_token":"eyJhbGciOiJIUzI1NiIsImtpZCI6ImZkYTEwNjY0NTNkYzlkYzNkZDkzM2E0MWVhNTdkYTNlZjI0MmIwZjciLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwOi8vMTI3LjAuMC4xIiwiYXpwIjoiZmFrZS1zZXJ2aWNlLWFjY291bkBwcm9qZWN0LWlkLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiZW1haWwiOiJmYWtlLXNlcnZpY2UtYWNjb3VudEBwcm9qZWN0LWlkLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTY2MDA2Mzk1NCwiaWF0IjoxNjYwMDYwMzU0LCJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJzdWIiOiI3NDExNzQxMTc0MTE3NDExNzQxMSJ9.aa5tPd_v-hrjDqlT-IlhBGYNT0tes3VvzjixRryc-t8"}';
+                }
+              }
+              ]]
+                },
+                dns_mock = helpers.dns_mock.new()
+            }
+            fixtures.dns_mock:A{
+                name = 'oauth2.googleapis.com',
+                address = '127.0.0.1'
+            }
+
             -- start kong
             assert(helpers.start_kong({
                 -- set the strategy
@@ -38,7 +59,7 @@ for _, strategy in helpers.all_strategies() do
                 plugins = "bundled," .. PLUGIN_NAME,
                 -- write & load declarative config, only if 'strategy=off'
                 declarative_config = strategy == "off" and helpers.make_yaml_file() or nil
-            }))
+            }, nil, nil, fixtures))
         end)
 
         lazy_teardown(function()
@@ -69,7 +90,7 @@ for _, strategy in helpers.all_strategies() do
                 local header_value = assert.request(r).has.header("Authorization")
                 -- validate the value of that header
                 -- Bearer should start with {"alg":"RS256","kid":  encoded in base64
-                assert.equal("Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6", string.sub(header_value, 1, 35))
+                assert.equal("Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6", string.sub(header_value, 1, 35))
             end)
         end)
     end)

@@ -34,7 +34,8 @@ for _, strategy in helpers.all_strategies() do
                   listen 80;
                   keepalive_requests 10;
                   location = /computeMetadata/v1/instance/service-accounts/default/identity {
-                    echo 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImZkYTEwNjY0NTNkYzlkYzNkZDkzM2E0MWVhNTdkYTNlZjI0MmIwZjciLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwOi8vMTI3LjAuMC4xIiwiYXpwIjoicG9ydGFsLXNhQHBsYXlncm91bmQtMjYwMTE2LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiZW1haWwiOiJwb3J0YWwtc2FAcGxheWdyb3VuZC0yNjAxMTYuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZXhwIjoxNjYwMDYzOTU0LCJpYXQiOjE2NjAwNjAzNTQsImlzcyI6Imh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbSIsInN1YiI6IjExNjY1OTg0OTI0NTU4Nzg3OTcxMSJ9.h8jEvAJn4OgzWgZT0etO5eDKDrS81ejAuoFtN2mmKh0UoyRV-phAx-pySVhKr465WLdXu_S5Y8QpY6Fptw_f-Eaw9W0adhX6Ll54UJf9ftQph6mew8GCa8ul8soWfb1-emKah_0CjDeb2CjfbNkWLJ43Rpu1vwOsM3-FGvHwGbQr2oiXTTiXQbgOz_ncdsCIF1mlch6VPhfKRnedIHpdDnxkg7bDIc-OeFheMJ74IzETWzPLZsZtDf9UZ7h8bkUc-QDi9Mzt3e0jVF3WCTDNz5p_z6pJUUqe8yKf7XXuf6Np_bNtqlRpzyY6LRKPUBrTqWuJLNa9VhSbvVwPmUs2YQ';
+                    default_type  application/octet-stream;
+                    echo 'eyJhbGciOiJIUzI1NiIsImtpZCI6ImZkYTEwNjY0NTNkYzlkYzNkZDkzM2E0MWVhNTdkYTNlZjI0MmIwZjciLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwOi8vMTI3LjAuMC4xIiwiYXpwIjoiZmFrZS1zZXJ2aWNlLWFjY291bkBwcm9qZWN0LWlkLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiZW1haWwiOiJmYWtlLXNlcnZpY2UtYWNjb3VudEBwcm9qZWN0LWlkLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTY2MDA2Mzk1NCwiaWF0IjoxNjYwMDYwMzU0LCJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJzdWIiOiI3NDExNzQxMTc0MTE3NDExNzQxMSJ9.aa5tPd_v-hrjDqlT-IlhBGYNT0tes3VvzjixRryc-t8';
                   }
                 }
                 ]]
@@ -87,7 +88,7 @@ for _, strategy in helpers.all_strategies() do
                 local header_value = assert.request(r).has.header("Authorization")
                 -- validate the value of that header
                 -- Bearer should start with {"alg":"RS256","kid":  encoded in base64
-                assert.equal("Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6", string.sub(header_value, 1, 35))
+                assert.equal("Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6", string.sub(header_value, 1, 35))
             end)
         end)
     end)
