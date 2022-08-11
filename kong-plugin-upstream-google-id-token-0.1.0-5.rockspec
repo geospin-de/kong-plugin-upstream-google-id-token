@@ -1,32 +1,32 @@
 local plugin_name = "upstream-google-id-token"
 local package_name = "kong-plugin-" .. plugin_name
 local package_version = "0.1.0"
-local rockspec_revision = "1"
-
-local github_account_name = "geospin"
-local github_repo_name = "code/" .. package_name
-local git_checkout = package_version == "dev" and "main" or package_version
+local rockspec_revision = "5"
 
 package = package_name
 version = package_version .. "-" .. rockspec_revision
-supported_platforms = {"linux", "macosx"}
+
 source = {
-    url = "git+https://gitlab.com/" .. github_account_name .. "/" .. github_repo_name .. ".git",
-    branch = git_checkout
+    url = "git+ssh://git@gitlab.com/geospin/code/" .. package_name .. ".git",
+    tag = version
 }
 
 description = {
-    summary = "Kong is a scalable and customizable API Management Layer built on top of Nginx.",
+    summary = "Kong plugin to do service to service authentication with upstream services running in GCP.",
+    detailed = [[
+        This plugin will add a Google ID-Token into the HTTP Header of proxied requests through the Kong gateway.
+        The purpose of this, is to provide service to service authentication and authorization to upstream APIs running in the Google Cloud ([like Google Cloud Run].
+        It is inspired by the "Kong Upstream JWT Plugin
+    ]],
     homepage = "https://geospin.de",
     license = "Private"
 }
 
-dependencies = {}
+dependencies = {"lua >= 5.1"}
 
 build = {
     type = "builtin",
     modules = {
-        -- TODO: add any additional code files added to the plugin
         ["kong.plugins." .. plugin_name .. ".handler"] = "kong/plugins/" .. plugin_name .. "/handler.lua",
         ["kong.plugins." .. plugin_name .. ".schema"] = "kong/plugins/" .. plugin_name .. "/schema.lua",
         ["kong.plugins." .. plugin_name .. ".access"] = "kong/plugins/" .. plugin_name .. "/access.lua"

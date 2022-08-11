@@ -13,3 +13,5 @@ luacov.report.out
 .containerid
 # exclude .vscode settings
 .vscode
+# osx
+.DS_Store
