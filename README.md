@@ -39,7 +39,7 @@ luarocks install kong-plugin-upstream-google-id-token
 
 You need [Pongo](https://github.com/Kong/kong-pongo) to run the tests.
 
-```
+```bash
 pongo run
 ```
 Expected output:
@@ -47,6 +47,15 @@ Expected output:
 Kong version: 2.8.1
 ●●●●●●●●●●
 10 successes / 0 failures / 0 errors / 0 pending : 27.130195 seconds
+```
+
+## Create and upload rock file to luarocks.org
+
+You can use the **Pongo** environment for this. All you need is an API key, which you can generate after successfully registering on luarocks.org.
+
+```bash
+pongo shell luarocks upload --api-key <API_KEY> \
+  /kong-plugin/kong-plugin-upstream-google-id-token-<VERSION>.rockspec
 ```
 
 ## Maintainers
