@@ -1,13 +1,13 @@
 local plugin_name = "upstream-google-id-token"
 local package_name = "kong-plugin-" .. plugin_name
 local package_version = "0.1.0"
-local rockspec_revision = "5"
+local rockspec_revision = "6"
 
 package = package_name
 version = package_version .. "-" .. rockspec_revision
 
 source = {
-    url = "git+ssh://git@gitlab.com/geospin/code/" .. package_name .. ".git",
+    url = "git+https://github.com/geospin-de/" .. package_name .. ".git",
     tag = version
 }
 
@@ -19,7 +19,7 @@ description = {
         It is inspired by the "Kong Upstream JWT Plugin
     ]],
     homepage = "https://geospin.de",
-    license = "Private"
+    license = "Apache 2.0"
 }
 
 dependencies = {"lua >= 5.1"}
