@@ -17,8 +17,6 @@ jobs:
         - "2.7.x"
         - "2.8.x"
         - "nightly"
-        - "2.7.2.x"
-        - "2.8.1.x"
 
     steps:
     - uses: actions/checkout@v3
