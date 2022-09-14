@@ -48,7 +48,7 @@ local function build_token_request_payload(conf)
     local payload = {
         iss = google_application_credentials['client_email'],
         aud = google_application_credentials['token_uri'],
-        target_audience = get_audience(), -- conf.audience,
+        target_audience = get_audience(),
         iat = current_time,
         exp = current_time + 60
     }
@@ -106,7 +106,7 @@ end
 --- Add the google id token as jwt header to the request
 -- @param conf kong configuration
 local function add_id_token_jwt_header(conf)
-    local token_cache_key = get_audience() -- conf.audience
+    local token_cache_key = get_audience()
     local refresh_function = get_id_token_from_metadata_service
 
     if (google_application_credentials) then
@@ -130,7 +130,6 @@ end
 --- Execute the script
 -- @param conf kong configuration
 function _M.execute(conf)
-    -- kong.log.inspect(google_application_credentials)
     add_id_token_jwt_header(conf)
 end
 
