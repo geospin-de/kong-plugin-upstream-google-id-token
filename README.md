@@ -51,7 +51,7 @@ Kong version: 2.8.1
 
 ## Create and upload rock file to luarocks.org
 
-You can use the **Pongo** environment for this. All you need is an API key, which you can generate after successfully registering on <luarocks.org>.
+You can use the **Pongo** environment for this. All you need is an API key, which you can generate after successfully registering on <https://luarocks.org>.
 
 ```bash
 pongo shell luarocks upload --api-key <API_KEY> \
